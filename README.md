@@ -46,4 +46,21 @@ geocoder
     // TODO: Handle error
   });
 
+// Or
+
+geocoder
+  .geocode({
+    street: '2600 Clifton Ave',
+    city: 'Cincinnati',
+    state: 'Ohio',
+    postalcode: '45220'
+  })
+  .then(function(results) {
+    console.log(results.latitude);
+    console.log(results.longitude);
+  })
+  .catch(function() {
+    // TODO: Handle error
+  });
+
 ```

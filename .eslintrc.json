@@ -1,0 +1,12 @@
+{
+  "extends": "eslint:recommended",
+  "ecmaVersion": 6,
+  "ecmaFeatures": {
+    "modules": true
+  },
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "parser": "babel-eslint"
+}

@@ -35,18 +35,21 @@ var Nodinatim = function () {
 
   _createClass(Nodinatim, [{
     key: 'geocode',
-    value: function geocode(street, city, state, postalcode) {
+    value: function geocode(location, city, state, postalcode) {
       var _this = this;
 
+      var providedObject = typeof street === 'object';
+      var params = {
+        street: providedObject ? location.street : location,
+        city: providedObject ? location.city : city,
+        state: providedObject ? location.state : state,
+        postalcode: providedObject ? location.postalcode : postalcode,
+        format: 'json',
+        limit: 1
+      };
+
       var search = function search(resolve, reject) {
-        var query = _querystring2.default.stringify({
-          street: street,
-          city: city,
-          state: state,
-          postalcode: postalcode,
-          format: 'json',
-          limit: 1
-        });
+        var query = _querystring2.default.stringify(params);
 
         var options = {
           host: _this.url.host,

@@ -8,16 +8,19 @@ class Nodinatim {
     this.url = url.parse(base || 'https://nominatim.openstreetmap.org');
   }
 
-  geocode(street, city, state, postalcode) {
+  geocode(location, city, state, postalcode) {
+    const providedObject = typeof street === `object`;
+    const params = {
+      street: providedObject ? location.street : location,
+      city: providedObject ? location.city : city,
+      state: providedObject ? location.state : state,
+      postalcode: providedObject ? location.postalcode : postalcode,
+      format: `json`,
+      limit: 1
+    };
+
     const search = (resolve, reject) => {
-      const query = qs.stringify({
-        street,
-        city,
-        state,
-        postalcode,
-        format: `json`,
-        limit: 1
-      });
+      const query = qs.stringify(params);
 
       const options = {
         host: this.url.host,
