@@ -1,4 +1,5 @@
-# nodinatim
+# nodinatim - [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c4b7bd836384aa696e7f192dac6340a)](https://www.codacy.com/app/andrew-lively2/nodinatim?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=andrewlively/nodinatim&amp;utm_campaign=Badge_Grade) [![Build Status](https://travis-ci.org/andrewlively/nodinatim.svg?branch=master)](https://travis-ci.org/andrewlively/nodinatim)
+
 Geocode locations with [Nominatim](https://wiki.openstreetmap.org/wiki/Nominatim) and [Node.js](https://nodejs.org/)
 
 ## Docs
@@ -11,19 +12,36 @@ const geocoder = new Nodinatim();
 
 ```
 
-### geocode(street, city, state, zip)
+### geocode(query)
 
 Params: 
- * Street - String
- * City - String
- * State - String
- * Postalcode/Zipcode - String
 
-Returns:
-  * Promise
-  * Object
-    * latitude
-    * longitude
+```javascript
+{
+  street: String,
+  city: String,
+  county: String,
+  state: String,
+  postalcode: String || Number,
+  viewbox: {
+    left: Number,
+    top: Number,
+    right: Number,
+    bottom: Number
+  },
+  bounded: Boolean,
+  excludePlaces: [String]
+}
+```
+
+Returns a Promise with Lat/Long pair like below:
+
+```javascript
+{
+  latitude: Number,
+  longitude: Number
+}
+```
 
 ## Example
 ```javascript

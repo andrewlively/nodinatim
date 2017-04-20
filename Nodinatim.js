@@ -1,66 +1,88 @@
-import http from 'http';
-import https from 'https';
-import qs from 'querystring';
-import url from 'url';
+const http = require('http');
+const https = require('https');
+const qs = require('querystring');
+const url = require('url');
 
-class Nodinatim {
+const search = function (url, params) {
+  return function (resolve, reject) {
+    const options = {
+      host: url.host,
+      path: `/search?${ qs.stringify(params) }`
+    };
+
+    const responseHandler = function(response) {
+      let body = '';
+
+      response.on('data', function(d) {
+          body += d;
+      });
+
+      response.on('end', function() {
+        if (response.statusCode !== 200) {
+          return reject(`Failed to geocode`);
+        }
+
+        const results = JSON.parse(body);
+
+        if (!results.length) {
+          return reject('Failed to geocode - No locations found');
+        }
+
+        resolve({
+          latitude: parseFloat(results[0].lat),
+          longitude: parseFloat(results[0].lon)
+        });
+      });
+    };
+
+    const agent = url.protocol === 'https:' ? https : http;
+
+    agent.get(options, responseHandler);
+  }
+}
+
+function checkViewbox(viewbox) {
+  if (
+    !viewbox ||
+    !Object.keys(viewbox).length ||
+    isNaN(viewbox.left) ||
+    isNaN(viewbox.top) ||
+    isNaN(viewbox.right) ||
+    isNaN(viewbox.bottom)
+  ) {
+    return ``;
+  }
+
+  return `${ viewbox.left },${ viewbox.top }.${ viewbox.right },${ viewbox.bottom }`
+}
+
+module.exports = class Nodinatim {
   constructor(base) {
     this.url = url.parse(base || 'https://nominatim.openstreetmap.org');
   }
 
-  geocode(location, city, state, postalcode) {
-    const providedObject = typeof street === `object`;
+  geocode(query = {}) {
     const params = {
-      street: providedObject ? location.street : location,
-      city: providedObject ? location.city : city,
-      state: providedObject ? location.state : state,
-      postalcode: providedObject ? location.postalcode : postalcode,
+      street: query.street || ``,
+      city: query.city || ``,
+      county: query.county || ``,
+      state: query.state || ``,
+      postalcode: query.postalcode || ``,
+      bounded: query.bounded ? 1 : 0,
       format: `json`,
       limit: 1
     };
 
-    const search = (resolve, reject) => {
-      const query = qs.stringify(params);
+    const viewbox = checkViewbox(query.viewbox);
 
-      const options = {
-        host: this.url.host,
-        path: `/search?${ query }`
-      };
-
-      const responseHandler = function(response) {
-        let body = '';
-
-        response.on('data', function(d) {
-            body += d;
-        });
-
-        response.on('end', function() {
-          if (response.statusCode !== 200) {
-            return reject(`Failed to geocode`);
-          }
-
-          const results = JSON.parse(body);
-
-          if (!results.length) {
-            return reject('Failed to geocode - No locations found');
-          }
-
-          resolve({
-            latitude: results[0].lat,
-            longitude: results[0].lon
-          });
-        });
-      };
-
-      const agent = this.url.protocol === 'https:' ? https : http;
-
-      agent.get(options, responseHandler);
+    if (viewbox) {
+      params.viewbox = viewbox;
     }
 
-    search.bind(this);
+    if (Array.isArray(query.excludePlaces) && query.excludePlaces.length) {
+      params.exclude_places_ids = query.excludePlaces.join(`,`);
+    }
 
-    return new Promise(search);
+    return new Promise(search(this.url, params));
   }
 }
-
-export default Nodinatim;

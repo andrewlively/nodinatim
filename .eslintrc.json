@@ -1,6 +1,9 @@
 {
   "extends": "eslint:recommended",
   "ecmaVersion": 6,
+  "plugins": [
+    "jest"
+  ],
   "ecmaFeatures": {
     "modules": true
   },
