@@ -6,7 +6,8 @@ const url = require('url');
 const search = function (url, params) {
   return function (resolve, reject) {
     const options = {
-      host: url.host,
+      hostname: url.hostname,
+      port: url.port ? url.port : url.protocol === `https:` ? 443 : 80,
       path: `/search?${ qs.stringify(params) }`
     };
 

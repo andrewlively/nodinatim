@@ -12,7 +12,8 @@ var url = require('url');
 var search = function search(url, params) {
   return function (resolve, reject) {
     var options = {
-      host: url.host,
+      hostname: url.hostname,
+      port: url.port ? url.port : url.protocol === `https:` ? 443 : 80,
       path: `/search?${qs.stringify(params)}`
     };
 
