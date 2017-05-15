@@ -47,24 +47,7 @@ Returns a Promise with Lat/Long pair like below:
 ```javascript
 import Nodinatim from 'nodinatim';
 
-const geocoder = new Nodinatim();
-
-geocoder
-  .geocode(
-    '2600 Clifton Ave',
-    'Cincinnati',
-    'Ohio',
-    '45220'
-  )
-  .then(function(results) {
-    console.log(results.latitude);
-    console.log(results.longitude);
-  })
-  .catch(function() {
-    // TODO: Handle error
-  });
-
-// Or
+const geocoder = new Nodinatim(); // Can include self-hosted nominatim server in instantiation. Defaults to https://nominatim.openstreetmap.org/
 
 geocoder
   .geocode({
