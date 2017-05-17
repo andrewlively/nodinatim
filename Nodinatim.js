@@ -64,15 +64,20 @@ module.exports = class Nodinatim {
 
   geocode(query = {}) {
     const params = {
-      street: query.street || ``,
-      city: query.city || ``,
-      county: query.county || ``,
-      state: query.state || ``,
-      postalcode: query.postalcode || ``,
-      bounded: query.bounded ? 1 : 0,
       format: `json`,
       limit: 1
     };
+
+    if (typeof query === `string`) {
+      params.q = query;
+    } else {
+      params.street = query.street || ``;
+      params.city = query.city || ``;
+      params.county = query.county || ``;
+      params.state = query.state || ``;
+      params.postalcode = query.postalcode || ``;
+      params.bounded = query.bounded ? 1 : 0;
+    }
 
     const viewbox = checkViewbox(query.viewbox);
 
