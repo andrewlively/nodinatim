@@ -1,3 +1,6 @@
+# DEPRECATED!!!
+This library is no longer being supported/developed and instead it is recommended you use [node-geocoder](https://github.com/nchaulet/node-geocoder)
+
 # nodinatim - [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c4b7bd836384aa696e7f192dac6340a)](https://www.codacy.com/app/andrew-lively2/nodinatim?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=andrewlively/nodinatim&amp;utm_campaign=Badge_Grade) [![Build Status](https://travis-ci.org/andrewlively/nodinatim.svg?branch=master)](https://travis-ci.org/andrewlively/nodinatim)
 
 Geocode locations with [Nominatim](https://wiki.openstreetmap.org/wiki/Nominatim) and [Node.js](https://nodejs.org/)
